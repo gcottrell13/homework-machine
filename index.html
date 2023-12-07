@@ -70,8 +70,15 @@ function onActivate() {
 	
 	button.disabled = true;
 	const secondsToReturn = 10;
+	let timer = secondsToReturn;
 	
-	setTimeout(() => {
+	const interval = setInterval(() => {
+		if (timer > 0) {
+			timer --;
+			output.innerHTML = `Thinking... ${timer}`;
+			return;
+		}
+		
 		button.disabled = false;
 		if (value.trim() === "") {
 			output.innerHTML = "Please enter a math problem.";
@@ -86,16 +93,7 @@ function onActivate() {
 			output.innerHTML = "Sorry, I don't know how to do that.";
 		}
 		clearInterval(interval);
-	}, secondsToReturn * 1000);
-	
-	let timer = secondsToReturn;
-	const interval = setInterval(
-		() => {
-			timer --;
-			output.innerHTML = `Thinking... ${timer}`;
-		},
-		1000,
-	);
+	}, 1000);
 	
 }
 

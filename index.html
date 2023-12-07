@@ -1,0 +1,103 @@
+<head>
+<title>Homework Machine</title>
+</head>
+
+<body>
+
+<h1>Homework Machine</h1>
+<div id="dime-count"></div>
+<input id="input" /> <button id="button" onclick="onActivate()">Go</button>
+<div id="output" />
+
+
+<script>
+let dimes = 10;
+
+const dimeCounter = document.getElementById("dime-count");
+const input = document.getElementById("input");
+const output = document.getElementById("output");
+const button = document.getElementById("button");
+
+function updateDimes() {
+	dimeCounter.innerHTML = `$ ${dimes/10}`;
+	if (dimes <= 0) {
+		button.disabled = true;
+		button.innerHTML = "You have no more money";
+	}
+}
+
+updateDimes();
+
+intRE = /^(\d+)$/;
+
+function tryParseInt(n) {
+	try {
+		return parseInt(intRE.exec(n.trim())[0]);
+	}
+	catch {
+		return null;
+	}
+}
+
+
+function homeworkmachine(expression) {
+	let sum = 0;
+
+	const parts = expression.split('+');
+	for (let part of parts) {
+		const parsed = tryParseInt(part);
+		if (typeof parsed !== "number") throw new Exception();
+		
+		sum += parsed;
+	}
+	
+	return sum.toString().substr(1);
+}
+
+function onActivate() {
+	value = input.value;
+	output.innerHTML = "";
+	
+	if (dimes <= 0) {
+		output.innerHTML = "You have no more money.";
+		return;
+	}
+	
+	dimes --;
+	updateDimes();
+	
+	output.innerHTML = "Thinking very hard...";
+	
+	button.disabled = true;
+	const secondsToReturn = 10;
+	
+	setTimeout(() => {
+		button.disabled = false;
+		if (value.trim() === "") {
+			output.innerHTML = "Please enter a math problem.";
+			return;
+		}
+		
+		try {
+			const result = homeworkmachine(value);
+			output.innerHTML = result.toString();
+		}
+		catch {
+			output.innerHTML = "Sorry, I don't know how to do that.";
+		}
+		clearInterval(interval);
+	}, secondsToReturn * 1000);
+	
+	let timer = secondsToReturn;
+	const interval = setInterval(
+		() => {
+			timer --;
+			output.innerHTML = `Thinking... ${timer}`;
+		},
+		1000,
+	);
+	
+}
+
+</script>
+</body>
